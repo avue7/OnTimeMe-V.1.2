@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "955792506678",
+    "firebase_url": "https://ontimeme-c948f.firebaseio.com",
+    "project_id": "ontimeme-c948f",
+    "storage_bucket": "ontimeme-c948f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955792506678:android:7ddea65e41939724",
+        "android_client_info": {
+          "package_name": "com.OnTimeMe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "955792506678-smrll2iq227jdeq1k7kcu5snm37rbr0a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.OnTimeMe",
+            "certificate_hash": "545d04f07829991c526fe57be8f8eda4488ae7f1"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6XgjyRTr1TRY9uMYe1Rq7zuPJ5iGFumE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "955792506678-kmjd5q1kqpjsv603fcob8rr29fss6fff.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
