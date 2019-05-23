@@ -1,0 +1,345 @@
+#!/bin/bash
+
+#########################################################
+# @file ic 						#
+# @author Athit Vue					#
+# @date 2/20/2018					#
+# @brief						#
+#   This is a very simple script to make executing the  #
+#   commonly used commands for ionic easier and faster. #
+#    							#
+#   Note: this script assumes you have installed        #
+#   the android platform and your target is set	        #
+#   appropriately to the working device or AVD. 	#
+#########################################################
+
+##################### USAGE #############################
+# The script will run with "ic <commands>":             #
+#							#
+# 1. requirements - "ionic cordova requirements"        #
+# 2. info         - "ionic info"			#
+# 3. update	  - "ionic doctor check"		#
+# 4. build        - "ionic cordova build android"       #
+# 5. emulate      - "ionic cordova emulate android"     #
+# 6. lab          - "ionic lab"                         #
+# 7. serve        - "ionic serve"                       #
+# 8. run 	  - "ionic cordova run"			#
+# 9. g 		  - "ionic g"
+							#
+# Note: run "ic -u" for basic user interface		#
+#########################################################
+
+###### COLORS #######
+YELLOW="\033[1;33m" #
+RED="\033[0;31m"    #
+END="\033[0m"       #
+#####################
+
+### Declarations ####
+COMMAND=$1
+INPUT=""
+INPUT_2=""
+COUNT=0
+TERMINATE=0 # Flag; loop termination
+UI_ON=0      # Are we done with UI
+EXIT_LOOP=0 # Check for valid commands
+
+### Known commands ###
+declare -a commands=("build" "emulate" "serve" "lab" "requirements"
+		      "update" "info" "run" "-i" "?" "g" "emulation"
+		    )
+
+# Check for arguments (" $# " - gets number of command line args)
+if [ $# -eq 0 ] || [ $# -gt 1 ]
+then
+  if [ $# -eq 0 ]
+  then
+    # "echo -e \a" beeps (alert), if you have beep turn on.
+    echo -e $RED"\a#### Error: I need to know what command to execute! ####"$END
+    echo " "
+  fi
+  if [ $# -gt 1 ]
+  then
+    echo -e $RED"\a### Error: Too many arguments! ###"$END
+  fi
+  echo " "
+  echo -e " Usage: "
+  echo -e "        \"ic <command>\""
+  echo " "
+  echo -e " Note:  "
+  echo -e "        Type \"ic ?\" for available commands."
+  echo -e "        Type \"ic -i \" for interactive mode."
+  echo " "
+  exit 1
+fi
+
+# ITERATE THRU ARRAY. IF NOT IN ARRAY THEN OUTPUT ERROR AND TERMINATE
+for i in "${commands[@]}"
+do
+  if [ "$i" != "$COMMAND" ]
+  then
+        #echo "not found"
+        EXIT_LOOP=1
+        #echo "$EXIT_LOOP"
+  else
+        #echo "found"
+	EXIT_LOOP=0
+        #echo "$EXIT_LOOP"
+        break;
+  fi
+done
+# COMMAND NOT VALID FROM COMMAND LINE ARGUMENT
+if [ $EXIT_LOOP -eq 1 ]
+then
+	echo -e $RED"\a#### Error: <$COMMAND> is not a valid command! ####"$END
+	echo " "
+	echo -e " Usage: "
+	echo -e "        \"ic <command>\""
+	echo " "
+	echo -e " Note:  "
+	echo -e "        Type \"ic ?\" for available commands."
+	echo -e "        Type \"ic -i \" for interactive mode."
+        exit 1
+fi
+
+### PROMPT USER INPUT ###
+first="Please enter the command you'd like to execute,"
+second="enter a number or 'q' to quit: "
+
+### BIG WHILE LOOP ###
+while [ $TERMINATE -eq 0 ]
+do
+  # Use case statements to execute commands
+  # NOTE: Add to this list as you learn more commands!!!!
+  case "$COMMAND" in
+	build)
+                echo " "
+                echo -e $YELLOW"Executing 'ionic cordova build android'..."$END
+		echo " "
+		TERMINATE=1
+       		ionic cordova build android;;
+	emulate)
+                echo " "
+                echo -e $YELLOW"Executing 'ionic cordova emulate android'..."$END
+		echo " "
+  		TERMINATE=1
+		ionic cordova emulate android;;
+	lab)
+                echo " "
+                echo -e $YELLOW"Executing 'ionic lab'..."$END
+		echo " "
+  		TERMINATE=1
+		ionic lab;;
+	serve)
+                echo " "
+                echo -e $YELLOW"Executing 'ionic serve'..."$END
+		echo " "
+  		TERMINATE=1
+		ionic serve;;
+	run)
+                echo " "
+                echo -e $YELLOW"Executing 'ionic cordova run android'..."$END
+		echo " "
+  		TERMINATE=1
+		ionic cordova run android;;
+	info)
+                echo " "
+                echo -e $YELLOW"Executing 'ionic info'..."$END
+		echo " "
+  		TERMINATE=1
+		ionic info;;
+	requirements)
+                echo " "
+                echo -e $YELLOW"Executing 'ionic cordova requirements'..."$END
+		echo " "
+  		TERMINATE=1
+		ionic cordova requirements;;
+	update)
+                echo " "
+                echo -e $YELLOW"Executing 'ionic doctor check'..."$END
+		echo " "
+  		TERMINATE=1
+		ionic doctor check;;
+	g)
+		echo " "
+   		echo -e $YELLOW"Executing 'ionic g $2 $3 '..."$END
+		echo " "
+		TERMINATE=1
+		ionic g;;
+	emulation)
+			echo " "
+	   		echo -e $YELLOW"Executing 'ionic cordova emulate android --livereload $2 $3 '..."$END
+			echo " "
+			TERMINATE=1
+			ionic cordova emulate android --livereload;;
+	?)
+		echo -e $YELLOW"The following commands are available:"$END
+        	echo " "
+                echo "Usage: \"ic <command>\""
+                echo " "
+		echo " "
+                echo "### Commands: ###"
+                echo ""
+		echo "  1. requirements"
+		echo "              executes \"ionic cordova requirements\" - checks/prints requirements"
+		echo "  2. info"
+		echo "              executes \"ionic info\" - print system/environment info"
+		echo "  3. update"
+		echo "              executes \"ionic doctor check\" - checks health of Ionic project"
+		echo "  4. build"
+		echo "              executes \"ionic cordova build android\""
+		echo "  5. emulate"
+		echo "              executes \"ionic cordova emulate android\""
+		echo "  6. lab"
+		echo "              executes \"ionic lab\""
+		echo "  7. serve"
+		echo "              executes \"ionic serve\""
+		echo "  8. g"
+		echo "              executes \"ionic g\" - Generatates:"
+		echo "              component, directive, page, pipe, provider, tabs"
+		echo "  9. emulation"
+		echo "              executes \"ionic cordova emulate android --livereload\""
+		echo "              component, directive, page, pipe, provider, tabs"
+		echo "  10. run"
+		echo "              executes \"ionic cordova run\" - runs on a real device"
+		echo " "
+	        echo "              - Instructions: "
+		echo "     	          1. Go to phones settings > About device > find Build Verion"
+		echo "	 	  2. Tap the Build Version 7 times."
+		echo "	 	  3. Back out. Tap Developer Option."
+		echo "	 	  4. Scroll down to find USB Debugging and tick the box."
+		echo "	 	  5. Rerun \"ionic corodova run android\"."
+		echo " "
+ 		echo " "
+		echo "  Note: Please type \"ic -i\" in the terminal for interactive mode"
+		break;;
+        -i)     ################# USER INTERFACE IMPLEMENTATION #####################
+                # Set the UI Flag on
+		UI_ON=1
+		if [ $COUNT -lt 1 ]
+		then
+		  echo -e $YELLOW"The following commands are available:"$END
+		  echo ""
+		  echo "  1. requirements"
+		  echo "              executes \"ionic cordova requirements\" - checks/prints requirements"
+		  echo "  2. info"
+		  echo "              executes \"ionic info\" - print system/environment info"
+		  echo "  3. update"
+		  echo "              executes \"ionic doctor check\" - checks health of Ionic project"
+		  echo "  4. build"
+		  echo "              executes \"ionic cordova build android\""
+		  echo "  5. emulate"
+		  echo "              executes \"ionic cordova emulate android\""
+		  echo "  6. lab"
+		  echo "              executes \"ionic lab\""
+		  echo "  7. serve"
+		  echo "              executes \"ionic serve\""
+		  echo "  8. g"
+		  echo "              executes \"ionic g\" - Generatates:"
+		  echo "              component, directive, page, pipe, provider, tabs"
+		  echo "  9. run"
+		  echo "              executes \"ionic cordova run\" - runs on a real device"
+		  echo " "
+		  echo "              - Instructions: "
+		  echo "     	          1. Go to phones settings > About device > find Build Verion"
+		  echo "	 	  2. Tap the Build Version 7 times."
+		  echo "	 	  3. Back out. Tap Developer Option."
+		  echo "	 	  4. Scroll down to find USB Debugging and tick the box."
+		  echo "	 	  5. Rerun \"ionic corodova run android\"."
+        	  echo " "
+
+                  COUNT=$(($COUNT+1))
+	        fi
+
+                # Reprompt
+		if [ $COUNT -eq 1 ] && [ $TERMINATE -ne 1 ]
+		then
+        	  # Read, ask user what he/she wants to do
+                  echo $first
+        	  read -p "$second" INPUT
+		fi
+
+                # If count is > 1, ask if start over
+                if [ $COUNT -gt 1 ]
+		then
+			read -p "Run more commands (Enter: y/n)? " INPUT_2
+                        if echo "$INPUT_2" | grep -iq "^y"
+                        then
+			    TERMINATE=0
+			    COUNT=0
+			    COMMAND="-i"
+			    echo " "
+			    continue
+ 			elif echo "$INPUT_2" | grep -iq "^n"
+			then
+			    exit 0
+			else
+                            # No valid input error to screen and prompt for input again
+	                    echo " "
+			    echo -e $RED"Error: <$INPUT_2> is not a valid input..."$END
+			    continue
+		        fi
+                fi
+
+                # If q, then quit else run command
+                if echo "$INPUT_2" | grep -iq "^n"
+                then
+			exit 0
+                elif echo "$INPUT" | grep -iq "^q"
+		then
+			exit 0
+		else
+                  case "$INPUT" in
+			1)
+				COMMAND="requirements"
+		                COUNT=$(($COUNT+1))
+				continue;;
+ 			2)
+				COMMAND="info"
+		                COUNT=$(($COUNT+1))
+ 				continue;;
+			3)
+				COMMAND="update"
+		                COUNT=$(($COUNT+1))
+				continue;;
+			4)
+				COMMAND="build"
+		                COUNT=$(($COUNT+1))
+				continue;;
+			5)
+				COMMAND="emulate"
+		                COUNT=$(($COUNT+1))
+				continue;;
+			6)
+				COMMAND="lab"
+		                COUNT=$(($COUNT+1))
+				continue;;
+			7)
+				COMMAND="serve"
+		                COUNT=$(($COUNT+1))
+				continue;;
+			8)
+				COMMAND="g"
+		                COUNT=$(($COUNT+1))
+				continue;;
+			9)
+				COMMAND="run"
+		                COUNT=$(($COUNT+1))
+				continue;;
+		  esac
+		fi
+
+                # No valid input error to screen and prompt for input again
+	        echo " "
+		echo -e $RED"Error: <$INPUT> is not a valid input..."$END
+		continue;;
+  esac
+
+  # FOR USER INTERFACE ARE WE DONE????
+  if [ $TERMINATE -eq 1 ] && [ $UI_ON -eq 1 ]
+  then
+        TERMINATE=0
+	COMMAND="-i"
+	echo " "
+fi
+done
