@@ -43,8 +43,10 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      //this.statusBar.styleDefault();
-      //this.splashScreen.hide();
+      this.statusBar.overlaysWebView(true);
+      this.statusBar.styleDefault();
+
+      // this.splashScreen.hide();
       this.isLoggedIn();
     });
   }
@@ -56,11 +58,14 @@ export class AppComponent {
       this.router.navigate(["/home"]);
       this.splashScreen.hide();
     }, error => {
-      console.log("AppComponent:: no user found...routing to login page");
+      console.log("AppComponent:: no user logged in...routing to login page");
+      // this.statusBar.styleDefault();
+
       this.router.navigate(["/login"]);
+
       this.splashScreen.hide();
     });
-    this.statusBar.styleDefault();
+    // this.statusBar.styleDefault();
   }
 
   logout(){

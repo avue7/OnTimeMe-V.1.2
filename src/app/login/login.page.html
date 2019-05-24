@@ -1,18 +1,20 @@
-<ion-content class="login-content" padding>
+<ion-content color="primary">
+  <div  class="login-content">
   <ion-row class="logo-row">
       <h1 class="logo">OnTimeMe</h1>
     <ion-col></ion-col>
   </ion-row>
-  <div class="login-box">
+  <div text-center>
     <form (ngSubmit)="doGoogleLogin()" #registerForm="ngForm">
       <ion-row>
         <ion-col class="login-col">
-          <button ion-button class="login-btn" full type="submit">
+          <ion-button large type="submit">
             Sign in with &nbsp;
             <ion-icon name="logo-googleplus"></ion-icon>
-          </button>
+          </ion-button>
         </ion-col>
       </ion-row>
     </form>
+  </div>
   </div>
 </ion-content>
