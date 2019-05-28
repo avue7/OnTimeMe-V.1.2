@@ -43,8 +43,14 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.overlaysWebView(true);
-      this.statusBar.styleDefault();
+      this.statusBar.overlaysWebView(false);
+      // this.statusBar.styleDefault();
+      // this.statusBar.styleBlackOpaque();
+      this.statusBar.backgroundColorByName("black");
+      // this.statusBar.backgroundColorByHexString("#183382");
+      // this.statusBar.styleBlackTranslucent();
+
+
 
       // this.splashScreen.hide();
       this.isLoggedIn();

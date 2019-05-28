@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+
 
 import { AuthService } from '../services/auth.service';
 // import { Observable } from 'rxjs/Observable';
@@ -18,8 +20,11 @@ export class LoginPage implements OnInit {
   constructor(
     private loadingCtrl: LoadingController,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private statusBar: StatusBar
   ) {
+    // this.statusBar.overlaysWebView(true);
+    // this.statusBar.styleDefault();
   }
 
   ngOnInit() {
