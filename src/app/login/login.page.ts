@@ -32,16 +32,29 @@ export class LoginPage implements OnInit {
   }
 
   async doGoogleLogin(){
-    const loading = await this.loadingCtrl.create({
-      message: 'Please wait...'
-    });
-    this.presentLoading(loading);
+    const loading = await this.createLoading();
+    await this.presentLoading(loading);
 
+    console.log("3")
     this.authService.doGoogleLogin(loading);
   }
 
+  async createLoading(){
+    let loading = await this.loadingCtrl.create({
+      message: 'Please wait...',
+      spinner: 'bubbles',
+      // animated: true,
+      cssClass: 'custom-loader-class',
+      showBackdrop: true,
+      backdropDismiss: true
+    });
+    console.log("1")
+    return loading;
+  }
+
   async presentLoading(loading) {
-    return await loading.present();
+    console.log("2")
+    await loading.present();
   }
 
 }

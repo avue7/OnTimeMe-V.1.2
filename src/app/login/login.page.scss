@@ -15,17 +15,23 @@
       padding-bottom: 100px;
     }
 
-    // .login-col {
-    //   margin: 0px 8px 0px 8px;
-    // }
+    .login-col {
+      margin: 0px 8px 0px 8px;
+    }
 
 
   }
 
   ion-button{
-    --background: #062f77;
+    --background: white;
     text-align: center;
+    color: #cc1016;
     // vertical-align: middle;
+  }
+
+  .logo-icon {
+    padding-top: 20%;
+    text-align: center;
   }
 
   .logo {
@@ -33,10 +39,10 @@
       // top: 40%;
       width: 100%;
       font-weight: bolder;
-      color: aliceblue;
+      color: #cc1016;
       letter-spacing: -3px;
       text-align: center;
-      padding-top: 30%;
+      padding-top: 40%;
   }
 
   .vertical-align{

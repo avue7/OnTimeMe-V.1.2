@@ -9,3 +9,21 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+.custom-loader-class {
+  --background:#00040c;
+  // --max-height:50px;
+  // --max-width:50px;
+  --height:15%;
+  --width:70%;
+  // --background: none;
+  // --spinner-color:#F94701;
+  color: white;
+  text-align: center;
+  font-size: 12px;
+}
+
+ion-toolbar {
+  --background: #3880ff;
+  color: white;
+}
