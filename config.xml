@@ -95,5 +95,5 @@
         <variable name="PLAY_SERVICES_VERSION" value="11.8.0" />
     </plugin>
     <plugin name="cordova-plugin-nativestorage" spec="^2.3.2" />
-    <allow-navigation href="http://192.168.1.2:8100" sessionid="5eb49322" />
+    <allow-navigation href="http://192.168.1.2:8100" sessionid="b89e3058" />
 </widget>

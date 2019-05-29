@@ -1,11 +1,31 @@
 <ion-app>
   <ion-split-pane>
     <ion-menu>
+      <!-- This is user profile in the side menu begins -->
       <ion-header>
         <ion-toolbar>
-          <ion-title>Menu</ion-title>
+          <div class="profile">
+            <div *ngIf="userPicture; else defaultPicture">
+              <img class="picture" [src]="userPicture">
+            </div>
+            <ng-template class="picture" #defaultPicture>
+              no pictures
+            </ng-template>
+            <div *ngIf="userName; else defaultName">
+              <h3 class="name"> {{userName}} </h3>
+            </div>
+            <ng-template class="name" #defaultName>
+              <h3 class="name"> Anonymous</h3>
+            </ng-template>
+          </div>
+
+          <p align="right" style="font-size:10px;color:black">
+            Logged-in as: {{userEmail}} &nbsp;
+          </p>
         </ion-toolbar>
       </ion-header>
+      <!-- Side Menu Profile Ends -->
+      <!-- Side Menu Contents Begins -->
       <ion-content>
         <ion-list>
           <ion-menu-toggle auto-hide="true" *ngFor="let p of appPages">
@@ -19,11 +39,13 @@
           <ion-button (click)="logout()" fill="clear" float-right>
             <ion-icon name="log-out">
             </ion-icon>
-            Log-out
+            &nbsp; Log-out
           </ion-button>
         </ion-list>
       </ion-content>
+      <!-- Side Menu Contents Ends -->
     </ion-menu>
+
     <ion-router-outlet main></ion-router-outlet>
   </ion-split-pane>
 </ion-app>

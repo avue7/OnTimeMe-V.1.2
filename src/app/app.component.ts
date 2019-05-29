@@ -10,7 +10,8 @@ import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html'
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss']
 })
 export class AppComponent {
   public appPages = [
@@ -25,6 +26,10 @@ export class AppComponent {
       icon: 'list'
     }
   ];
+
+  userName: any;
+  userEmail: any;
+  userPicture: any;
 
   constructor(
     private platform: Platform,
@@ -43,23 +48,34 @@ export class AppComponent {
     await this.platform.ready().then( async () => {
       this.statusBar.overlaysWebView(false);
       this.statusBar.backgroundColorByName("black");
-
-      await setTimeout(() => {
-        this.splashScreen.hide();
-      }, 2000)
-    })
-    .then( () => {
       this.isLoggedIn();
     });
   }
 
   async isLoggedIn(){
     await this.nativeStorage.getItem('google_user')
-    .then (data => {
+    .then (async data => {
       console.log("AppComponent:: user already logged in:", data);
+      this.userName = data.name;
+      this.userEmail = data.email;
+      this.userPicture = data.picture;
+
+      await setTimeout(() => {
+        this.splashScreen.hide();
+      }, 2000);
+
       this.router.navigate(["/home"]);
-    }, error => {
+    }, async error => {
       console.log("AppComponent:: no user logged in...routing to login page");
+
+      this.userName = null;
+      this.userEmail = null;
+      this.userPicture = null;
+
+      await setTimeout(() => {
+        this.splashScreen.hide();
+      }, 2000)
+
       this.router.navigate(["/login"]);
     });
   }

@@ -1,5 +1,44 @@
 ion-menu{
- ion-content{
-  background-color:black !important;
- }
+  ion-content{
+    background-color:black !important;
+  }
+
+  .imgwrap {
+    text-align: center !important;
+    img {
+     border: 0;
+     max-width: 140px;
+     border-radius: 50%;
+     width: 80px;
+     height: 80px;
+     margin: auto;
+    }
+  }
+
+  div.profile {
+    top: 15%;
+    right: 0;
+    left: 0;
+    z-index: 0;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    padding-top: 15px;
+  }
+
+  .profile .name {
+    color: #FFFFFF;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .profile .picture {
+    border-radius: 50%;
+  }
+
+  // ion-button {
+  //   color:white;
+  // }
 }
