@@ -104,7 +104,7 @@ export class AppComponent {
   logout(){
     this.menu.close();
     // Must unsubscribe the user before heading logging out.
-    this.userSubscription.unsubscribe();
+    // this.userSubscription.unsubscribe();
     console.log("Checking user subscription", this.userSubscription);
     this.authService.logout();
   }

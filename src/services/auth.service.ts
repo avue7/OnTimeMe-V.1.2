@@ -71,9 +71,6 @@ export class AuthService {
       .then (() => {
         this.googlePlus.logout().then(response => {
           console.log("Successfully logged out of google", response);
-        })
-        .then (() => {
-          this.afAuthSubscription.unsubscribe();
         });
       })
       .then ( () => {
