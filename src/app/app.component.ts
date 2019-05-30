@@ -7,9 +7,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { AuthService } from '../services/auth.service';
 import { Observable, Subscription } from 'rxjs';
-import { UserService } from '../services/user.service';
-
-
 
 @Component({
   selector: 'app-root',
@@ -45,23 +42,20 @@ export class AppComponent {
     private router: Router,
     private menu: MenuController,
     private authService: AuthService,
-    private userService: UserService,
   ) {
     this.initializeApp()
   }
 
   initializeApp() {
-    // return new Promise(resolve => {
-      this.platform.ready().then(() => {
-        this.statusBar.overlaysWebView(false);
-        this.statusBar.backgroundColorByName("black");
+    this.platform.ready().then(() => {
+      this.statusBar.overlaysWebView(false);
+      this.statusBar.backgroundColorByName("black");
+    })
+    .then(() => {
+      this.createUserAuthObservable().then(userName => {
+        this.isLoggedIn(userName);
       })
-      .then(() => {
-        this.createUserAuthObservable().then(userName => {
-          this.isLoggedIn(userName);
-        })
-      });
-    // });
+    });
   }
 
   isLoggedIn(userName : any){
@@ -88,17 +82,15 @@ export class AppComponent {
 
   createUserAuthObservable(){
     return new Promise(resolve => {
-      // this.userSubscription = this.authService.afAuth.authState.subscribe(
       this.userSubscription = this.authService.getUserData().subscribe(
         user => {
           if(user){
             console.log("1. AppComponent::observer: Setting new user:", user);
-            // this.userService.setUserData(user);
 
-            // this.userName = this.userService.getUserName();
             this.userName = user.displayName;
             this.userEmail = user.email;
             this.userPicture = user.photoURL;
+
             resolve(this.userName);
           } else {
             console.log("1. AppComponent::observer: Setting new user:", user);
@@ -111,11 +103,9 @@ export class AppComponent {
 
   logout(){
     this.menu.close();
-
     // Must unsubscribe the user before heading logging out.
     this.userSubscription.unsubscribe();
     console.log("Checking user subscription", this.userSubscription);
-
     this.authService.logout();
   }
 

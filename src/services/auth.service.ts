@@ -3,7 +3,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { LoadingController } from '@ionic/angular';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Router } from '@angular/router';
-import { UserService } from './user.service';
 
 import * as firebase from 'firebase/app';
 import AuthProvider = firebase.auth.AuthProvider;
@@ -16,8 +15,7 @@ import { Observable, Subject } from 'rxjs';
 export class AuthService {
 
   private user: firebase.User;
-
-  afAuthSubscription: any;
+  private afAuthSubscription: any;
   private subject = new Subject<any>();
 
   constructor(
@@ -26,7 +24,6 @@ export class AuthService {
     private nativeStorage: NativeStorage,
     private router: Router,
     public afAuth: AngularFireAuth,
-    private userService: UserService
   ) {
     afAuth.authState.subscribe(user => {
       console.log("DEBUGGING:: AuthService: user changed", user);
@@ -51,8 +48,6 @@ export class AuthService {
     })
     .then(user => {
       loading.dismiss();
-
-      // this.userService.setUserData(user);
 
       let googleCredential = firebase.auth.GoogleAuthProvider.credential(user.idToken);
       this.afAuth.auth.signInAndRetrieveDataWithCredential(googleCredential).then(response => {
@@ -79,7 +74,6 @@ export class AuthService {
         })
         .then (() => {
           this.afAuthSubscription.unsubscribe();
-          this.userService.deleteUserData();
         });
       })
       .then ( () => {
