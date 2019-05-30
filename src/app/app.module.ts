@@ -16,6 +16,7 @@ import { AngularFireAuthModule,  AngularFireAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 import { AuthService } from '../services/auth.service';
+import { CalendarEventsService } from '../services/calendar-events.service';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { AuthService } from '../services/auth.service';
     GooglePlus,
     AngularFireAuth,
     AuthService,
+    CalendarEventsService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: FirestoreSettingsToken, useValue: {} }
   ],
