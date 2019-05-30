@@ -52,6 +52,12 @@ export class AppComponent {
       this.statusBar.backgroundColorByName("black");
     })
     .then(() => {
+      // If app gets restarted and it already has a user subscription
+      // then dont create another one without unsubscibing to the first one.
+      if(this.userSubscription){
+        this.userSubscription.unsubscribe();
+      };
+
       this.createUserAuthObservable().then(userName => {
         this.isLoggedIn(userName);
       })
