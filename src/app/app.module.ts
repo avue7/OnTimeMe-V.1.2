@@ -17,6 +17,8 @@ import { environment } from '../environments/environment';
 import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 import { AuthService } from '../services/auth.service';
 import { CalendarEventsService } from '../services/calendar-events.service';
+import { GoogleCalendarService } from '../services/google-calendar.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,7 @@ import { CalendarEventsService } from '../services/calendar-events.service';
   entryComponents: [],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
@@ -38,8 +41,12 @@ import { CalendarEventsService } from '../services/calendar-events.service';
     AngularFireAuth,
     AuthService,
     CalendarEventsService,
+    GoogleCalendarService,
+    HttpClient,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: FirestoreSettingsToken, useValue: {} }
+    { provide: FirestoreSettingsToken, useValue: {} },
+    // {provide: ErrorHandler, useClass: IonicErrorHandler},
+
   ],
   bootstrap: [AppComponent]
 })

@@ -70,16 +70,12 @@ export class AppComponent {
     " userNameParam: ", userName);
 
     if(userName){
-      setTimeout(() => {
-        this.splashScreen.hide();
-      }, 2000);
+      this.splashScreen.hide();
 
       console.log("3. AppComponent::isLoggedIn(): routing to home...");
       this.router.navigate(["/home"]);
     } else {
-      setTimeout(() => {
-        this.splashScreen.hide();
-      }, 2000);
+      this.splashScreen.hide();
 
       console.log("3. AppComponent::isLoggedIn(): routing to login page...");
       this.router.navigate(["/login"]);
