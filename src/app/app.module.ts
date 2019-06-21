@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicModule, IonicRouteStrategy, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -19,12 +19,24 @@ import { AuthService } from '../services/auth.service';
 import { CalendarEventsService } from '../services/calendar-events.service';
 import { GoogleCalendarService } from '../services/google-calendar.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { DatabaseService } from 'src/services/database.service';
+import { MapService } from 'src/services/map.service';
+import { TransModeService } from 'src/services/trans-mode.service';
+import { NativeCalendarService } from 'src/services/native-calendar.service';
+import { Calendar } from '@ionic-native/calendar/ngx';
+import { NetworkService } from 'src/services/network.service';
+import { Network } from '@ionic-native/network/ngx';
+import { HomePage } from 'src/home/home.page';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomePage
   ],
-  entryComponents: [],
+  entryComponents: [
+    HomePage
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -43,6 +55,14 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     CalendarEventsService,
     GoogleCalendarService,
     HttpClient,
+    DatabaseService,
+    MapService,
+    TransModeService,
+    AlertController,
+    NativeCalendarService,
+    Calendar,
+    NetworkService,
+    Network,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: FirestoreSettingsToken, useValue: {} },
     // {provide: ErrorHandler, useClass: IonicErrorHandler},

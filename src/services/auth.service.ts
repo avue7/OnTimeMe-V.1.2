@@ -39,14 +39,14 @@ export class AuthService {
     this.subject.next(user);
   }
 
-  getUserData(){
+  getUserProfileObservable(){
     return this.subject.asObservable();
   }
 
   async doGoogleLogin(loading){
     this.googlePlus.login({
       'webClientId' : '955792506678-h09nnar8geirvpsev6i9bm9a2hs2mn3b.apps.googleusercontent.com',
-      'scopes' : 'https://www.googleapis.com/auth/calendar.readonly',
+      'scopes' : 'https://www.googleapis.com/auth/calendar',
       'offline' : true
     })
     .then(user => {
@@ -84,34 +84,30 @@ export class AuthService {
     this.nativeStorage.setItem('google_user', userParam);
   }
 
+  getUserData(){
+    return this.nativeStorage.getItem('google_user');
+  }
+
+  getUserId(){
+    let user = firebase.auth().currentUser;
+    return user.uid;
+  }
+
+  clearNativeStorage(){
+    this.nativeStorage.clear().then(() => {
+      console.log("Clearing everything in native storage before logging out");
+    });
+  }
+
   logout(){
     this.afAuth.auth.signOut().then( async () => {
       console.log("Successfully logged out of afAuth");
-      // this.trySilentLogin().then(() => {})
-      // .then (() => {
-      //   this.googlePlus.logout().then(response => {
-      //     console.log("Successfully logged out of google", response);
-      //   });
-      // })
-      // .then ( () => {
+        this.clearNativeStorage();
         this.router.navigate(['/login']);
-      // });
     }, error => {
       console.log("Error logging out", error);
     });
   }
 
-  // trySilentLogin(){
-  //   return this.googlePlus.trySilentLogin({
-  //     'scopes' : 'https://www.googleapis.com/auth/calendar.readonly',
-  //     'webClientId' : '955792506678-kmjd5q1kqpjsv603fcob8rr29fss6fff.apps.googleusercontent.com',
-  //     'offline' : true
-  //   })
-  //   .then ((succ) => {
-  //     console.log("AuthService:: trySilentLogin(): successful");
-  //   }, error => {
-  //     console.log("AuthService:: trySilentLogin(): failed,", error);
-  //   });
-  // }
 
 }

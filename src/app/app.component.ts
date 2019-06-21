@@ -7,6 +7,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { AuthService } from '../services/auth.service';
 import { Observable, Subscription } from 'rxjs';
+import { Network } from '@ionic-native/network/ngx';
+import { NetworkService } from 'src/services/network.service';
+
 
 @Component({
   selector: 'app-root',
@@ -32,6 +35,8 @@ export class AppComponent {
   userPicture: any;
 
   userSubscription: Subscription;
+  networkConnectedSub: Subscription;
+  networkDisconnectSub: Subscription;
 
   constructor(
     private platform: Platform,
@@ -42,11 +47,14 @@ export class AppComponent {
     private router: Router,
     private menu: MenuController,
     private authService: AuthService,
+    private network: Network,
+    private networkService: NetworkService
   ) {
     this.initializeApp()
   }
 
   initializeApp() {
+    console.log("******* START INITALIZE APP *********")
     this.platform.ready().then(() => {
       this.statusBar.overlaysWebView(false);
       this.statusBar.backgroundColorByName("black");
@@ -55,12 +63,15 @@ export class AppComponent {
       // If app gets restarted and it already has a user subscription
       // then dont create another one without unsubscibing to the first one.
       if(this.userSubscription){
+        console.log("App restarted, unsubscribing current user sub");
         this.userSubscription.unsubscribe();
       };
 
       this.createUserAuthObservable().then(userName => {
         this.isLoggedIn(userName);
-      })
+      });
+
+      this.createNetworkObservables();
     });
   }
 
@@ -71,6 +82,7 @@ export class AppComponent {
 
     if(userName){
       this.splashScreen.hide();
+      let isReady = "appDone";
 
       console.log("3. AppComponent::isLoggedIn(): routing to home...");
       this.router.navigate(["/home"]);
@@ -84,7 +96,7 @@ export class AppComponent {
 
   createUserAuthObservable(){
     return new Promise(resolve => {
-      this.userSubscription = this.authService.getUserData().subscribe(
+      this.userSubscription = this.authService.getUserProfileObservable().subscribe(
         user => {
           if(user){
             console.log("1. AppComponent::observer: Setting new user:", user);
@@ -100,6 +112,24 @@ export class AppComponent {
           }
         }
       )
+    });
+  }
+
+  // Checks the network for connection. Disables and enables certain
+  // functionalities of the apps based on dependency of network.
+  createNetworkObservables(){
+    console.log("Creating network observables")
+    this.networkConnectedSub = this.network.onConnect().subscribe(data => {
+      let networkType = this.network.type;
+      this.networkService.enableFunctionality();
+      this.networkService.onConnectUpdate(data.type, networkType);
+      console.log("Connected via " + networkType)
+    });
+
+    this.networkDisconnectSub = this.network.onDisconnect().subscribe(data => {
+      this.networkService.disableFunctionality();
+      this.networkService.onDisconnectUpdate();
+      console.log("Disconnected from internet");
     });
   }
 

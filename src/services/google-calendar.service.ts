@@ -11,6 +11,8 @@ export class GoogleCalendarService {
   events: any;
   calendarUrl: any = 'https://www.googleapis.com/calendar/v3';
   eventList: any = '/calendars/primary/events';
+  watchList: any = '/calendars/primary/events/watch';
+
 
   // Testing refresh token
   code: any;
@@ -96,6 +98,48 @@ export class GoogleCalendarService {
     });
   }
 
+  watchEventList(authToken: string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + authToken
+      })
+    };
+
+    let bodyRequest = {
+      id: '123@1212321321321321321321321321',
+      type: 'web_hook',
+      address: 'https://ontimeme-c948f.firebaseapp.com/testing.json'
+    }
+
+    let today = new Date(Date.now()).toISOString();
+    let tomorrow = new Date(Date.now() + 86400000).toISOString();
+    // let urlParams = '?timeMax='+ tomorrow + '&timeMin=' + today + '&orderBy=startTime&singleEvents=true';
+
+    return new Promise(resolve => {
+      this.http.post(this.calendarUrl + this.watchList /*+ urlParams*/, bodyRequest, httpOptions).subscribe(data => {
+        console.log("Google calendar changed", data);
+        resolve(data);
+      // }, (error) => {
+      //   console.log("Google-calendar::getList(): cannot get list, token expired:", error);
+      //   console.log("===>>>> using refresh token to get new authToken");
+      //   // this.init().then((newAuthToken) => {
+      //     // resolve(this.getList(newAuthToken));
+      //   // });
+      //
+      //   this.storage.getItem('google_user').then(user => {
+      //     let refreshToken = user.refreshToken;
+      //     this.getTempAuthToken(refreshToken).then((newAuthToken) => {
+      //       // resolve(this.getList(newAuthToken));
+      //       console.log("========>>>>", newAuthToken)
+      //       resolve();
+      //     })
+      //   })
+      });
+    });
+  }
+
+
   // STEP 4:
   //  Use the authToken from above method to make the api call
   getList(authToken: string) : Promise<any>{
@@ -120,21 +164,21 @@ export class GoogleCalendarService {
     return new Promise(resolve => {
       this.http.get(this.calendarUrl + this.eventList + urlParams, httpOptions).subscribe(data => {
         resolve(data);
-      }, (error) => {
-        console.log("Google-calendar::getList(): cannot get list, token expired:", error);
-        console.log("===>>>> using refresh token to get new authToken");
-        // this.init().then((newAuthToken) => {
-          // resolve(this.getList(newAuthToken));
-        // });
-
-        this.storage.getItem('google_user').then(user => {
-          let refreshToken = user.refreshToken;
-          this.getTempAuthToken(refreshToken).then((newAuthToken) => {
-            // resolve(this.getList(newAuthToken));
-            console.log("========>>>>", newAuthToken)
-            resolve();
-          })
-        })
+      // }, (error) => {
+      //   console.log("Google-calendar::getList(): cannot get list, token expired:", error);
+      //   console.log("===>>>> using refresh token to get new authToken");
+      //   // this.init().then((newAuthToken) => {
+      //     // resolve(this.getList(newAuthToken));
+      //   // });
+      //
+      //   this.storage.getItem('google_user').then(user => {
+      //     let refreshToken = user.refreshToken;
+      //     this.getTempAuthToken(refreshToken).then((newAuthToken) => {
+      //       // resolve(this.getList(newAuthToken));
+      //       console.log("========>>>>", newAuthToken)
+      //       resolve();
+      //     })
+      //   })
       });
     });
   }
