@@ -50,22 +50,22 @@ export class AppComponent {
     private network: Network,
     private networkService: NetworkService
   ) {
-    this.initializeApp()
+    this.initializeApp();
   }
 
   initializeApp() {
-    console.log("******* START INITALIZE APP *********")
+    console.log('******* START INITALIZE APP *********');
     this.platform.ready().then(() => {
       this.statusBar.overlaysWebView(false);
-      this.statusBar.backgroundColorByName("black");
+      this.statusBar.backgroundColorByName('black');
     })
     .then(() => {
       // If app gets restarted and it already has a user subscription
       // then dont create another one without unsubscibing to the first one.
-      if(this.userSubscription){
-        console.log("App restarted, unsubscribing current user sub");
+      if (this.userSubscription) {
+        console.log('App restarted, unsubscribing current user sub');
         this.userSubscription.unsubscribe();
-      };
+      }
 
       this.createUserAuthObservable().then(userName => {
         this.isLoggedIn(userName);
@@ -75,31 +75,30 @@ export class AppComponent {
     });
   }
 
-  isLoggedIn(userName : any){
-    console.log("----------Initial Boot UP---------------")
-    console.log("2. AppComponent::(DEBUG): this.username", this.userName +
-    " userNameParam: ", userName);
+  isLoggedIn(userName: any) {
+    console.log('----------Initial Boot UP---------------');
+    console.log('2. AppComponent::(DEBUG): this.username', this.userName +
+    ' userNameParam: ', userName);
 
-    if(userName){
+    if (userName) {
       this.splashScreen.hide();
-      let isReady = "appDone";
 
-      console.log("3. AppComponent::isLoggedIn(): routing to home...");
-      this.router.navigate(["/home"]);
+      console.log('3. AppComponent::isLoggedIn(): routing to home...');
+      this.router.navigate(['/home']);
     } else {
       this.splashScreen.hide();
 
-      console.log("3. AppComponent::isLoggedIn(): routing to login page...");
-      this.router.navigate(["/login"]);
+      console.log('3. AppComponent::isLoggedIn(): routing to login page...');
+      this.router.navigate(['/login']);
     }
   }
 
-  createUserAuthObservable(){
+  createUserAuthObservable() {
     return new Promise(resolve => {
       this.userSubscription = this.authService.getUserProfileObservable().subscribe(
         user => {
-          if(user){
-            console.log("1. AppComponent::observer: Setting new user:", user);
+          if (user) {
+            console.log('1. AppComponent::observer: Setting new user:', user);
 
             this.userName = user.displayName;
             this.userEmail = user.email;
@@ -107,37 +106,37 @@ export class AppComponent {
 
             resolve(this.userName);
           } else {
-            console.log("1. AppComponent::observer: Setting new user:", user);
-            resolve(null)
+            console.log('1. AppComponent::observer: Setting new user:', user);
+            resolve(null);
           }
         }
-      )
+      );
     });
   }
 
   // Checks the network for connection. Disables and enables certain
   // functionalities of the apps based on dependency of network.
-  createNetworkObservables(){
-    console.log("Creating network observables")
+  createNetworkObservables() {
+    console.log('Creating network observables');
     this.networkConnectedSub = this.network.onConnect().subscribe(data => {
-      let networkType = this.network.type;
+      const networkType = this.network.type;
       this.networkService.enableFunctionality();
       this.networkService.onConnectUpdate(data.type, networkType);
-      console.log("Connected via " + networkType)
+      console.log('Connected via ' + networkType);
     });
 
     this.networkDisconnectSub = this.network.onDisconnect().subscribe(data => {
       this.networkService.disableFunctionality();
       this.networkService.onDisconnectUpdate();
-      console.log("Disconnected from internet");
+      console.log('Disconnected from internet');
     });
   }
 
-  logout(){
+  logout() {
     this.menu.close();
     // Must unsubscribe the user before heading logging out.
     // this.userSubscription.unsubscribe();
-    console.log("Checking user subscription", this.userSubscription);
+    console.log('Checking user subscription', this.userSubscription);
     this.authService.logout();
   }
 

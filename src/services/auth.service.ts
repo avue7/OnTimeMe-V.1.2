@@ -5,12 +5,8 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Router } from '@angular/router';
 
 import * as firebase from 'firebase/app';
-import AuthProvider = firebase.auth.AuthProvider;
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
-import { Observable, Subject } from 'rxjs';
-import { auth } from 'firebase/app';
-
-declare var gapi: any;
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,13 +25,13 @@ export class AuthService {
     public afAuth: AngularFireAuth,
   ) {
     afAuth.authState.subscribe(user => {
-      console.log("DEBUGGING:: AuthService: user changed", user);
+      console.log('DEBUGGING:: AuthService: user changed', user);
       this.user = user;
       this.sendUserData(user);
     });
   }
 
-  sendUserData(user : any){
+  sendUserData(user: any){
     this.subject.next(user);
   }
 
@@ -43,44 +39,44 @@ export class AuthService {
     return this.subject.asObservable();
   }
 
-  async doGoogleLogin(loading){
+  async doGoogleLogin(loading: HTMLIonLoadingElement) {
     this.googlePlus.login({
-      'webClientId' : '955792506678-h09nnar8geirvpsev6i9bm9a2hs2mn3b.apps.googleusercontent.com',
-      'scopes' : 'https://www.googleapis.com/auth/calendar',
-      'offline' : true
+      webClientId : '955792506678-h09nnar8geirvpsev6i9bm9a2hs2mn3b.apps.googleusercontent.com',
+      scopes : 'https://www.googleapis.com/auth/calendar',
+      offline : true
     })
     .then(user => {
-      let userData = {
+      const userData = {
         name: user.displayName,
         email: user.email,
         picture: user.imageUrl,
         authToken: user.accessToken,
         serverAuthCode: user.serverAuthCode,
         idToken: user.idToken
-      }
+      };
 
-      let googleCredential = firebase.auth.GoogleAuthProvider.credential(user.idToken);
+      const googleCredential = firebase.auth.GoogleAuthProvider.credential(user.idToken);
 
-      this.afAuth.auth.signInAndRetrieveDataWithCredential(googleCredential).then(response => {
-        console.log("Successfully signed in with google plus", response);
+      this.afAuth.auth.signInAndRetrieveDataWithCredential(googleCredential).then(async response => {
+        console.log('Successfully signed in with google plus', response);
 
-        userData["userId"] = response.user.uid;
+        // userData['userId'] = response.user.uid;
 
-        this.storeUserData(userData);
+        await this.storeUserData(userData);
 
-        this.router.navigate(["/home"]);
+        this.router.navigate(['/home']);
       }, error => {
-        console.log("Error validating credentials", error);
-      })
+        console.log('Error validating credentials', error);
+      });
 
-      this.loading.dismiss();
+      loading.dismiss();
     }, err => {
-      console.log("Google login error:", err);
-      this.loading.dismiss();
+      console.log('Google login error:', err);
+      loading.dismiss();
     });
   }
 
-  storeUserData(userParam : any){
+  storeUserData(userParam: any){
     this.nativeStorage.setItem('google_user', userParam);
   }
 
@@ -89,23 +85,31 @@ export class AuthService {
   }
 
   getUserId(){
-    let user = firebase.auth().currentUser;
+    const user = firebase.auth().currentUser;
     return user.uid;
   }
 
   clearNativeStorage(){
     this.nativeStorage.clear().then(() => {
-      console.log("Clearing everything in native storage before logging out");
+      console.log('Clearing everything in native storage before logging out');
     });
   }
 
-  logout(){
-    this.afAuth.auth.signOut().then( async () => {
-      console.log("Successfully logged out of afAuth");
-        this.clearNativeStorage();
-        this.router.navigate(['/login']);
-    }, error => {
-      console.log("Error logging out", error);
+  logout() {
+    this.googlePlus.trySilentLogin ({
+      webClientId : '955792506678-h09nnar8geirvpsev6i9bm9a2hs2mn3b.apps.googleusercontent.com',
+      scopes : 'https://www.googleapis.com/auth/calendar',
+      offline : true
+    }).then(() => {
+      this.googlePlus.disconnect().then (() => {
+        this.afAuth.auth.signOut().then( async () => {
+          console.log('Successfully logged out of afAuth');
+          this.clearNativeStorage();
+          this.router.navigate(['/login']);
+        }, error => {
+          console.log('Error logging out', error);
+        });
+      });
     });
   }
 

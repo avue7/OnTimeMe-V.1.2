@@ -1,4 +1,4 @@
- import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -22,21 +22,16 @@ export class LoginPage {
   ) {
   }
 
-  async doGoogleLogin(){
-    const loading = await this.createLoading();
-    await this.presentLoading(loading);
-    this.authService.doGoogleLogin(loading);
-  }
-
-  async createLoading(){
-    let loading = await this.loadingCtrl.create({
+  async doGoogleLogin() {
+    const loading = await this.loadingCtrl.create({
       message: 'Please wait...',
       spinner: 'bubbles',
       cssClass: 'custom-loader-class',
       showBackdrop: true,
       backdropDismiss: true
     });
-    return loading;
+    this.presentLoading(loading);
+    this.authService.doGoogleLogin(loading);
   }
 
   async presentLoading(loading) {

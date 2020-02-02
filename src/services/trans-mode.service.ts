@@ -146,10 +146,10 @@ export class TransModeService {
     return new Promise(resolve => {
       let userId = this.auth.getUserId();
       this.nativeStorage.getItem(userId).then(mode => {
-        console.log("Getting all event transmode", mode);
+        console.log('Getting all event transmode', mode);
         resolve(mode.allEventMode);
       }, error => {
-        resolve(null)
+        resolve(null);
       });
     });
   }

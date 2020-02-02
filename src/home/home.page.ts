@@ -4,7 +4,7 @@ import { GoogleCalendarService } from '../services/google-calendar.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
 
-//Testing
+// Testing
 import { ViewChild, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { CalendarEventsService } from 'src/services/calendar-events.service';
@@ -43,44 +43,45 @@ export class HomePage {
   }
 
   // Methods in this lifecycle will run everytime page is in the view
-  ionViewDidEnter(){
-    console.log("============= Homapage LOADED ================")
+  ionViewDidEnter() {
+    console.log('============= Homapage LOADED ================');
     this.checkMode().then((mode) => {
       this.allEventMode = mode;
-      console.log("checkmode returned mode", this.allEventMode);
+      console.log('checkmode returned mode', this.allEventMode);
       this.runCalendarRoutine();
     }, error => {
-      console.log("Error while checking mode")
+      console.log('Error while checking mode');
     });
   }
 
-  ionViewDidLeave(){
+  ionViewDidLeave() {
   }
 
-  checkMode(){
+  checkMode() {
     return new Promise(resolve => {
       this.transMode.getAllEventMode().then(mode => {
-        if(mode){
-          console.log("Home::checkMode(): all event mode is", mode);
-          resolve(mode)
+        if (mode) {
+          console.log('Home::checkMode(): all event mode is', mode);
+          resolve(mode);
         } else {
-          console.log("Home::checkMode(): all event mode not set yet!");
-          let titleParam = "Welcome to OnTimeMe";
-          let message = "Please select default transportation mode for all events"
+          console.log('Home::checkMode(): all event mode not set yet!');
+          const titleParam = 'Welcome to OnTimeMe';
+          const message = 'Please select default transportation mode for all events';
           this.transMode.setAllEventMode(undefined, titleParam, message).then(() => {
-            this.transMode.getAllEventMode().then(mode => {
+            // tslint:disable-next-line:no-shadowed-variable
+            this.transMode.getAllEventMode().then((mode: any) => {
               // this.allEventMode = mode;
               resolve(mode);
             });
           });
-        };
+        }
       });
-    })
+    });
   }
 
   changeAllEventMode(){
-    let title = "Change transportation mode for all events?";
-    let message = "This will subtract -1 refresh token";
+    const title = 'Change transportation mode for all events?';
+    const message = 'This will subtract -1 refresh token';
     this.transMode.changeAllEventMode(this.allEventMode, title, message).then(() => {
       this.transMode.getAllEventMode().then(mode => {
         this.allEventMode = mode;
@@ -104,22 +105,22 @@ export class HomePage {
   // next 24 hours
   getAccessToGoogleCalendar(){
     let serverAuthCode : any;
-    console.log("checking storage for user data");
+    console.log('checking storage for user data');
     // Get serverAuthCode from native storage
     this.nativeStorage.getItem('google_user').then((user) => {
-      console.log("User data is", user);
+      console.log('User data is', user);
       serverAuthCode = user.serverAuthCode;
 
       // Now initialize service routine for getting temp
       // accessToken and get calendar list
       this.googleCalendar.init(serverAuthCode).then(authToken => {
-        console.log("HomePage:: authToken returned is", authToken)
+        console.log('HomePage:: authToken returned is', authToken)
 
         let allEventFlag = false;
         // this.googleCalendar.watchEventList(authToken);
 
         this.getList(authToken).then(list => {
-          console.log("Testing calendar list is", list)
+          console.log('Testing calendar list is', list);
 
           // Once we have the list then invoke the store method in
           // calendar events service to store list.
@@ -128,10 +129,10 @@ export class HomePage {
           // });
 
         }, error => {
-          console.log("Error getting list", error);
+          console.log('Error getting list', error);
         });
       }, error => {
-        console.log("Home:: googleCalendar init() error", error);
+        console.log('Home:: googleCalendar init() error', error);
       })
     });
   }
@@ -180,7 +181,8 @@ export class HomePage {
     // });
   }
 
-  ngOnDistroy(){
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngOnDestroy() {
     // this.routerSub.unsubscribe();
     this.allEventMode = null;
   }

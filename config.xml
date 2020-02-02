@@ -3,7 +3,7 @@
     <name>OnTimeMe</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.1.2:8100" />
+    <content original-src="index.html" src="http://192.168.1.2:8102" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -97,5 +97,10 @@
     </plugin>
     <plugin name="cordova-plugin-nativestorage" spec="^2.3.2" />
     <plugin name="cordova-plugin-calendar" />
-    <allow-navigation href="http://192.168.1.2:8100" sessionid="1bdc5f40" />
+    <allow-navigation href="http://192.168.1.2:8100" sessionid="717bc276" />
+    <allow-navigation href="http://192.168.1.2:8101" sessionid="9ddaac58" />
+    <allow-navigation href="http://192.168.1.2:8102" sessionid="a1e27737" />
+    <allow-navigation href="http://192.168.1.2:8103" sessionid="422ad937" />
+    <allow-navigation href="http://192.168.1.2:8104" sessionid="7d3d0098" />
+    <allow-navigation href="http://192.168.1.2:8105" sessionid="cc39c29c" />
 </widget>
